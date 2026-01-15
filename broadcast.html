@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Broadcaster - Diffuser en Direct</title>
+    <meta name="description" content="Page de diffusion pour streamer en direct">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="broadcaster-page">
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                        <circle cx="12" cy="12" r="3" fill="currentColor" />
+                    </svg>
+                    <span class="logo-text">LiveStream</span>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">Retour</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Broadcaster Section -->
+    <section class="broadcaster-section">
+        <div class="container">
+            <div class="broadcaster-container">
+                <div class="broadcaster-header">
+                    <h1 class="broadcaster-title">Studio de Diffusion</h1>
+                    <div class="broadcast-status" id="broadcastStatus">
+                        <span class="status-indicator offline"></span>
+                        <span class="status-text">Prêt à diffuser</span>
+                    </div>
+                </div>
+
+                <div class="broadcaster-grid">
+                    <!-- Video Preview -->
+                    <div class="preview-panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">Aperçu</h3>
+                            <div class="preview-controls">
+                                <button class="control-btn" id="switchCameraBtn" title="Changer de caméra">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M20 5L9 16.5L4 11.5" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="video-preview-wrapper">
+                            <video id="localVideo" autoplay muted playsinline></video>
+                            <div class="preview-overlay" id="previewOverlay">
+                                <div class="overlay-content">
+                                    <svg class="overlay-icon" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M23 7L16 12L23 17V7Z" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <rect x="1" y="5" width="15" height="14" rx="2" stroke="currentColor"
+                                            stroke-width="2" />
+                                    </svg>
+                                    <p class="overlay-text">Caméra désactivée</p>
+                                </div>
+                            </div>
+                            <div class="recording-indicator" id="recordingIndicator" style="display: none;">
+                                <span class="recording-dot"></span>
+                                EN DIRECT
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Controls Panel -->
+                    <div class="controls-panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">Contrôles</h3>
+                        </div>
+
+                        <div class="controls-content">
+                            <!-- Main Controls -->
+                            <div class="main-controls">
+                                <button class="broadcast-btn" id="startBroadcastBtn">
+                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                                        <circle cx="12" cy="12" r="3" fill="currentColor" />
+                                    </svg>
+                                    <span>Démarrer la Diffusion</span>
+                                </button>
+                                <button class="broadcast-btn stop-btn" id="stopBroadcastBtn" style="display: none;">
+                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="6" y="6" width="12" height="12" fill="currentColor" />
+                                    </svg>
+                                    <span>Arrêter la Diffusion</span>
+                                </button>
+                            </div>
+
+                            <!-- Media Controls -->
+                            <div class="media-controls">
+                                <button class="media-btn" id="toggleVideoBtn">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M23 7L16 12L23 17V7Z" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <rect x="1" y="5" width="15" height="14" rx="2" stroke="currentColor"
+                                            stroke-width="2" />
+                                    </svg>
+                                    <span>Caméra</span>
+                                </button>
+                                <button class="media-btn" id="toggleAudioBtn">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M12 1C10.3431 1 9 2.34315 9 4V12C9 13.6569 10.3431 15 12 15C13.6569 15 15 13.6569 15 12V4C15 2.34315 13.6569 1 12 1Z"
+                                            stroke="currentColor" stroke-width="2" />
+                                        <path d="M19 10V12C19 15.866 15.866 19 12 19C8.13401 19 5 15.866 5 12V10"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                        <path d="M12 19V23" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" />
+                                    </svg>
+                                    <span>Micro</span>
+                                </button>
+                            </div>
+
+                            <!-- Settings -->
+                            <div class="settings-group">
+                                <h4 class="settings-title">Paramètres</h4>
+                                <div class="setting-item">
+                                    <label for="cameraSelect" class="setting-label">Caméra</label>
+                                    <select id="cameraSelect" class="setting-select">
+                                        <option>Chargement...</option>
+                                    </select>
+                                </div>
+                                <div class="setting-item">
+                                    <label for="micSelect" class="setting-label">Microphone</label>
+                                    <select id="micSelect" class="setting-select">
+                                        <option>Chargement...</option>
+                                    </select>
+                                </div>
+                                <div class="setting-item">
+                                    <label for="qualitySelect" class="setting-label">Qualité</label>
+                                    <select id="qualitySelect" class="setting-select">
+                                        <option value="720">HD (720p)</option>
+                                        <option value="1080" selected>Full HD (1080p)</option>
+                                        <option value="480">SD (480p)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Stats -->
+                            <div class="stats-group">
+                                <h4 class="settings-title">Statistiques</h4>
+                                <div class="stat-row">
+                                    <span class="stat-label">Spectateurs:</span>
+                                    <span class="stat-value" id="viewerCountBroadcast">0</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">État:</span>
+                                    <span class="stat-value" id="connectionStateBroadcast">Déconnecté</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Bitrate:</span>
+                                    <span class="stat-value" id="bitrate">0 kbps</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instructions -->
+                <div class="instructions-panel">
+                    <h3 class="instructions-title">📱 Instructions pour Mobile</h3>
+                    <ol class="instructions-list">
+                        <li>Ouvrez cette page dans le navigateur de votre téléphone (Chrome ou Safari)</li>
+                        <li>Autorisez l'accès à la caméra et au microphone quand demandé</li>
+                        <li>Choisissez la caméra arrière ou avant selon vos besoins</li>
+                        <li>Cliquez sur "Démarrer la Diffusion" pour commencer</li>
+                        <li>Les spectateurs verront votre stream instantanément sur la page d'accueil</li>
+                    </ol>
+                    <div class="instructions-note">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                            <path d="M12 16V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                            <circle cx="12" cy="8" r="1" fill="currentColor" />
+                        </svg>
+                        <p><strong>Important:</strong> Assurez-vous d'avoir une connexion internet stable pour une
+                            diffusion de qualité.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="broadcaster.js"></script>
+</body>
+
+</html>

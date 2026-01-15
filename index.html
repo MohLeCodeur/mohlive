@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Stream - Diffusion en Direct</title>
+    <meta name="description" content="Plateforme de streaming en direct avec WebRTC">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                        <circle cx="12" cy="12" r="3" fill="currentColor" />
+                        <path d="M12 2C12 2 15 8 15 12C15 16 12 22 12 22" stroke="currentColor" stroke-width="2" />
+                        <path d="M12 2C12 2 9 8 9 12C9 16 12 22 12 22" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                    <span class="logo-text">LiveStream</span>
+                </div>
+                <nav class="nav">
+                    <a href="#home" class="nav-link active">Accueil</a>
+                    <a href="#about" class="nav-link">À propos</a>
+                    <a href="broadcast.html" class="nav-link cta-link">Diffuser</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-background">
+            <div class="gradient-orb orb-1"></div>
+            <div class="gradient-orb orb-2"></div>
+            <div class="gradient-orb orb-3"></div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="badge-dot"></span>
+                    <span>Streaming en temps réel</span>
+                </div>
+                <h1 class="hero-title">
+                    Diffusez en Direct
+                    <span class="gradient-text">Depuis Votre Téléphone</span>
+                </h1>
+                <p class="hero-description">
+                    Technologie WebRTC de pointe pour un streaming ultra-rapide et de haute qualité.
+                    Aucune installation requise, diffusez directement depuis votre navigateur.
+                </p>
+                <div class="hero-actions">
+                    <a href="#stream" class="btn btn-primary">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 3L19 12L5 21V3Z" fill="currentColor" />
+                        </svg>
+                        Regarder le Stream
+                    </a>
+                    <a href="broadcast.html" class="btn btn-secondary">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                            <circle cx="12" cy="12" r="3" fill="currentColor" />
+                        </svg>
+                        Commencer à Diffuser
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-value" id="viewerCount">0</div>
+                        <div class="stat-label">Spectateurs</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">
+                            < 500ms</div>
+                                <div class="stat-label">Latence</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">1080p</div>
+                            <div class="stat-label">Qualité Max</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <!-- Stream Section -->
+    <section class="stream-section" id="stream">
+        <div class="container">
+            <div class="stream-container">
+                <div class="stream-header">
+                    <div class="stream-info">
+                        <h2 class="stream-title">Diffusion en Direct</h2>
+                        <div class="stream-status" id="streamStatus">
+                            <span class="status-indicator offline"></span>
+                            <span class="status-text">Hors ligne</span>
+                        </div>
+                    </div>
+                    <div class="stream-controls">
+                        <button class="control-btn" id="fullscreenBtn" title="Plein écran">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M8 3H5C3.89543 3 3 3.89543 3 5V8M21 8V5C21 3.89543 20.1046 3 19 3H16M16 21H19C20.1046 21 21 20.1046 21 19V16M3 16V19C3 20.1046 3.89543 21 5 21H8"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                            </svg>
+                        </button>
+                        <button class="control-btn" id="volumeBtn" title="Volume">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                                <path
+                                    d="M15.54 8.46C16.4774 9.39764 17.0039 10.6692 17.0039 11.995C17.0039 13.3208 16.4774 14.5924 15.54 15.53"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="video-wrapper">
+                    <video id="remoteVideo" autoplay playsinline></video>
+                    <div class="video-overlay" id="videoOverlay">
+                        <div class="overlay-content">
+                            <svg class="overlay-icon" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                                <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" />
+                            </svg>
+                            <p class="overlay-text">En attente de la diffusion...</p>
+                            <p class="overlay-subtext">Le stream démarrera automatiquement</p>
+                        </div>
+                    </div>
+                    <div class="live-badge" id="liveBadge" style="display: none;">
+                        <span class="live-dot"></span>
+                        EN DIRECT
+                    </div>
+                </div>
+
+                <div class="stream-footer">
+                    <div class="connection-info">
+                        <div class="info-item">
+                            <span class="info-label">État:</span>
+                            <span class="info-value" id="connectionState">Déconnecté</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Qualité:</span>
+                            <span class="info-value" id="videoQuality">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Comment ça fonctionne ?</h2>
+                <p class="section-description">Une technologie simple et puissante pour un streaming instantané</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2" />
+                            <path d="M8 21H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                            <path d="M12 17V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">1. Ouvrez la Page Broadcaster</h3>
+                    <p class="feature-description">Accédez à la page de diffusion depuis votre téléphone ou ordinateur
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
+                            <path d="M12 2C12 2 8 6 8 12C8 18 12 22 12 22C12 22 16 18 16 12C16 6 12 2 12 2Z"
+                                stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">2. Autorisez la Caméra</h3>
+                    <p class="feature-description">Donnez l'accès à votre caméra et microphone pour commencer</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 3L19 12L5 21V3Z" fill="currentColor" />
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">3. Commencez à Diffuser</h3>
+                    <p class="feature-description">Cliquez sur "Démarrer" et votre stream sera visible instantanément
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                            <circle cx="12" cy="12" r="3" fill="currentColor" />
+                        </svg>
+                        <span class="logo-text">LiveStream</span>
+                    </div>
+                    <p class="footer-description">Streaming en direct avec WebRTC</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4 class="footer-heading">Plateforme</h4>
+                        <a href="#" class="footer-link">Fonctionnalités</a>
+                        <a href="#" class="footer-link">Documentation</a>
+                        <a href="#" class="footer-link">Support</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4 class="footer-heading">Légal</h4>
+                        <a href="#" class="footer-link">Confidentialité</a>
+                        <a href="#" class="footer-link">Conditions</a>
+                        <a href="#" class="footer-link">Cookies</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 LiveStream. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="viewer.js"></script>
+</body>
+
+</html>
