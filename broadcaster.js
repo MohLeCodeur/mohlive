@@ -43,6 +43,7 @@ class StreamBroadcaster {
         this.isAudioEnabled = true;
         this.currentCamera = 'user'; // 'user' for front, 'environment' for back
         this.devices = { cameras: [], microphones: [] };
+        this.wakeLock = null; // Wake Lock to keep screen on
 
         this.init();
     }
@@ -177,6 +178,9 @@ class StreamBroadcaster {
             this.recordingIndicator.style.display = 'flex';
             this.previewOverlay.classList.add('hidden');
 
+            // Request wake lock to keep screen on
+            await this.requestWakeLock();
+
             this.updateStatus('En direct', 'online');
 
             console.log('Broadcast started successfully');
@@ -211,6 +215,9 @@ class StreamBroadcaster {
         this.stopBroadcastBtn.style.display = 'none';
         this.recordingIndicator.style.display = 'none';
         this.previewOverlay.classList.remove('hidden');
+
+        // Release wake lock
+        this.releaseWakeLock();
 
         this.updateStatus('Prêt à diffuser', 'offline');
         this.viewerCountBroadcast.textContent = '0';
@@ -481,6 +488,40 @@ class StreamBroadcaster {
 
     updateViewerCount(count) {
         this.viewerCountBroadcast.textContent = count;
+    }
+
+    async requestWakeLock() {
+        try {
+            if ('wakeLock' in navigator) {
+                this.wakeLock = await navigator.wakeLock.request('screen');
+                console.log('Wake Lock activated - screen will stay on');
+
+                // Re-request wake lock if it's released (e.g., when switching tabs)
+                this.wakeLock.addEventListener('release', () => {
+                    console.log('Wake Lock released');
+                    if (this.isBroadcasting) {
+                        this.requestWakeLock();
+                    }
+                });
+            } else {
+                console.warn('Wake Lock API not supported on this device');
+            }
+        } catch (error) {
+            console.error('Error requesting wake lock:', error);
+        }
+    }
+
+    releaseWakeLock() {
+        if (this.wakeLock) {
+            this.wakeLock.release()
+                .then(() => {
+                    console.log('Wake Lock released successfully');
+                    this.wakeLock = null;
+                })
+                .catch((error) => {
+                    console.error('Error releasing wake lock:', error);
+                });
+        }
     }
 }
 
