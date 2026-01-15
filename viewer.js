@@ -4,7 +4,7 @@ const CONFIG = {
     // Change this to your signaling server URL when deployed
     SIGNALING_SERVER: window.location.hostname === 'localhost'
         ? 'http://localhost:3000'
-        : 'https://your-signaling-server.com',
+        : 'https://mohlive.onrender.com',
 
     ICE_SERVERS: [
         { urls: 'stun:stun.l.google.com:19302' },
